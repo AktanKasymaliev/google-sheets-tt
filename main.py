@@ -1,5 +1,6 @@
 from sheet.sheet import Sheet
 from db.configurations import config 
+from db.db import DB
 
 def main():
     config()
@@ -9,6 +10,9 @@ def main():
         'creds.json',
         '1Y9pLQIA8D0FuoyY5UM3Syqi5jyw-s3bqRHnLFyGnrPg'
         ).read_sheet(sheet_range)
+
+    db = DB()
+    
     return data
 
 if __name__ == "__main__":
