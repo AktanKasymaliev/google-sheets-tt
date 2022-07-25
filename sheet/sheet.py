@@ -31,7 +31,7 @@ class Sheet(AbstractSheet):
         :return: A dictionary with the values of the spreadsheet.
         """
         return self._service.spreadsheets().values().get(
-        spreadsheetId=self._SPREASHEET_ID,
-        range=range,
-        majorDimension='COLUMNS'
-    ).execute()
+                    spreadsheetId=self.sheet_id,
+                    range=range,
+                    majorDimension='COLUMNS'
+                                ).execute()

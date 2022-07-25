@@ -1,6 +1,9 @@
 from sheet.sheet import Sheet
+from db.configurations import config 
 
 def main():
+    config()
+
     sheet_range = 'A1:D60'
     data = Sheet(
         'creds.json',
