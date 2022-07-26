@@ -1,3 +1,5 @@
+from pprint import pprint
+
 from db import sheet_members
 from db.configurations import config, get_config_data
 from app.logic import Worker
@@ -12,9 +14,9 @@ def main():
     db = init_db(get_config_data("DATABASE_NAME"), sheet_members)
     sheet = init_sheet(credentials, sheet_id, sheet_range)
 
-    w = Worker(db, sheet).parse_sheet_data()
-    
-    return
+    w = Worker(db, sheet)
+    w.save_data_to_database()
+    pprint(w.get_all_records_from_db())
 
 if __name__ == "__main__":
     main()
