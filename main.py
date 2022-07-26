@@ -1,21 +1,19 @@
 from db import sheet_members
-from db.db import DB
 from db.configurations import config, get_config_data
-from sheet.sheet import Sheet
+from app.logic import Worker
+from app.funcs import init_db, init_sheet
 
 def main():
     config()
-
     sheet_range = 'A1:D60'
-    data = Sheet(
-        'creds.json',
-        '1Y9pLQIA8D0FuoyY5UM3Syqi5jyw-s3bqRHnLFyGnrPg'
-        ).read_sheet(sheet_range)
+    credentials = 'creds.json'
+    sheet_id = '1Y9pLQIA8D0FuoyY5UM3Syqi5jyw-s3bqRHnLFyGnrPg'
 
-    db = DB(
-        get_config_data("DATABASE_NAME"),
-        sheet_members
-        )
+    db = init_db(get_config_data("DATABASE_NAME"), sheet_members)
+    sheet = init_sheet(credentials, sheet_id, sheet_range)
+
+    w = Worker(db, sheet).parse_sheet_data()
+    
     return
 
 if __name__ == "__main__":

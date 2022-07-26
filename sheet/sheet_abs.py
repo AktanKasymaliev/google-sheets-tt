@@ -9,9 +9,10 @@ class AbstractSheet:
         'https://www.googleapis.com/auth/drive'
         ]
 
-    def __init__(self, creds_filename: str, sheet_id: str) -> None:
+    def __init__(self, creds_filename: str, sheet_id: str, range_: str) -> None:
         self.creds_filename = creds_filename
         self.sheet_id = sheet_id
+        self.range = range_
 
     @abstractmethod
     def __login_and_build_sheet(self) -> httplib2.Http:

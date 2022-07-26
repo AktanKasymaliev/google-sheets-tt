@@ -6,8 +6,8 @@ from oauth2client.service_account import ServiceAccountCredentials
 
 class Sheet(AbstractSheet):
 
-    def __init__(self, creds_filename: str, sheet_id: str) -> None:
-        super().__init__(creds_filename, sheet_id)
+    def __init__(self, creds_filename: str, sheet_id: str, range_: str) -> None:
+        super().__init__(creds_filename, sheet_id, range_)
         self._service = self.__login_and_build_sheet()
 
     def __login_and_build_sheet(self) -> httplib2.Http:
@@ -22,7 +22,7 @@ class Sheet(AbstractSheet):
 
         return apiclient.discovery.build('sheets', 'v4', http=http_auth)
 
-    def read_sheet(self, range: str) -> dict:
+    def read_sheet(self) -> dict:
         """
         > This function reads the data from the Google Sheet and returns it as a dictionary
         
@@ -32,6 +32,6 @@ class Sheet(AbstractSheet):
         """
         return self._service.spreadsheets().values().get(
                     spreadsheetId=self.sheet_id,
-                    range=range,
+                    range=self.range,
                     majorDimension='COLUMNS'
                                 ).execute()
