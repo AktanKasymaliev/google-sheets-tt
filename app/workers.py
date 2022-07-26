@@ -5,7 +5,7 @@ from sheet.sheet import Sheet
 
 from sqlalchemy.exc import IntegrityError
 
-class Worker:
+class GoogleSheetWorker:
     
     def __init__(self, db: DB, sheet: Sheet) -> None:
         self.db = db
@@ -47,7 +47,7 @@ class Worker:
                         "{}, '{}', {}, '{}'".format(*record)
                     )
         except IntegrityError:
-            print("\nSome Google Sheet records are alredy in database!\nIf the sheet had new records - they were added to database\n")
+            print("\nSome Google Sheet records are already in database!\nIf the sheet had new records - they were added to database\n")
 
     def get_all_records_from_db(self):
         return self.db.get_all_item('sheet')
