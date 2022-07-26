@@ -8,8 +8,11 @@ from sqlalchemy import Table
 
 class AbstractDB:
 
-    def __init__(self, database: str) -> None:
-        self.__set_config(database)
+    def __init__(self, 
+        password: str, dbname: str,
+        host: str, port: int, user: str 
+                ) -> None:
+        self.__set_config(password, dbname, host, port, user)
         self.engine = self.__create_connection()
         self.meta = MetaData()
 
@@ -44,16 +47,18 @@ class AbstractDB:
         It creates a connection to the database using the credentials provided in the constructor.
         :return: The engine object is being returned.
         """
-        URL = f'postgresql://{self.username}:{self.password}@{self.host}:{self.port}/{self.database}'
+        URL = f'postgresql://{self.user}:{self.password}@{self.host}:{self.port}/{self.dbname}'
         engine = create_engine(URL)
         return engine
     
-    def __set_config(self, database: str) -> None:
+    def __set_config(self,
+        password: str, dbname: str,
+        host: str, port: int, user: str ) -> None:
         """
-        It reads the config file and sets the class variables to the values in the config file
+        It sets the class variables to the values in the config file
         """
-        self.password = get_config_data("DATABASE_PASSW")
-        self.username = get_config_data("DATABASE_USER")
-        self.host = get_config_data("DATABASE_HOST")
-        self.port = get_config_data("DATABASE_PORT")
-        self.database = database
+        self.password = password
+        self.user = user
+        self.host = host
+        self.port = port
+        self.dbname = dbname

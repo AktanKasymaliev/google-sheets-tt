@@ -4,8 +4,11 @@ from sqlalchemy import text
 
 class DB(AbstractDB):
 
-    def __init__(self, database: str, tables_member: str) -> None:
-        super().__init__(database)
+    def __init__(self, 
+        password: str, dbname: str, 
+        host: str, port: int, 
+        user: str, tables_member: str) -> None:
+        super().__init__(password, dbname, host, port, user)
         self.__save_all_tables(tables_member)
 
     def get_all_item(self, table_name: str) -> str:
