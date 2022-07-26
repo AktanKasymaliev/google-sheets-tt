@@ -8,24 +8,19 @@ from sqlalchemy import Table
 
 class AbstractDB:
 
-    def __init__(self) -> None:
-        self.__set_config()
+    def __init__(self, database: str) -> None:
+        self.__set_config(database)
         self.engine = self.__create_connection()
         self.meta = MetaData()
 
     @abstractmethod
-    def get_item(self) -> None:
+    def get_all_item(self) -> None:
         """ Method for getting items from db  """
         pass
 
     @abstractmethod
-    def set_item(self) -> None:
+    def set_item(self) -> str:
         """ Method for setting items from db  """
-        pass
-
-    @abstractmethod
-    def delete_item(self) -> None:
-        """ Method for deleting items from db  """
         pass
 
     def create_table(self, 
@@ -53,7 +48,7 @@ class AbstractDB:
         engine = create_engine(URL)
         return engine
     
-    def __set_config(self) -> None:
+    def __set_config(self, database: str) -> None:
         """
         It reads the config file and sets the class variables to the values in the config file
         """
@@ -61,4 +56,4 @@ class AbstractDB:
         self.username = get_config_data("DATABASE_USER")
         self.host = get_config_data("DATABASE_HOST")
         self.port = get_config_data("DATABASE_PORT")
-        self.database = get_config_data("DATABASE_NAME")
+        self.database = database
