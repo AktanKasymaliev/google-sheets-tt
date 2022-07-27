@@ -1,0 +1,14 @@
+; For docker postgresql database
+; [DATABASE]
+; NAME=postgres
+; PASSWORD=postgres
+; HOST=db
+; USER=postgres
+
+; Your local database
+[DATABASE]
+NAME=db
+PASSWORD=db
+HOST=db
+PORT=db
+USER=db
