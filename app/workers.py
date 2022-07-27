@@ -2,6 +2,7 @@ from datetime import datetime
 
 from db.db import DB
 from sheet.sheet import Sheet
+from .funcs import get_dollar_currency
 
 from sqlalchemy.exc import IntegrityError
 
@@ -30,7 +31,14 @@ class GoogleSheetWorker:
                 ])
         parsed_data.pop(0)
         return parsed_data
+
+    def __convert_from_usd_to_rub(self, date):
+        return get_dollar_currency(date)
     
+    def __convert_date(self, record_date: str, from_: str, to: str):
+        formated_date = datetime.strptime(record_date, from_)
+        return formated_date.strftime(to)
+
     def save_data_to_database(self):
         """
         It takes the data from the Google Sheet, and saves it to the database
@@ -39,8 +47,16 @@ class GoogleSheetWorker:
         try:
             for record in parsed_records:
                 # Formating from your datestamp to database's
-                formated_date = datetime.strptime(record[-1], '%d.%m.%Y')
-                record[-1] = formated_date.strftime('%Y-%m-%d')
+                record[-1] = self.__convert_date(record[-1], '%d.%m.%Y', '%Y-%m-%d')
+
+                rub = self.__convert_from_usd_to_rub(
+                    self.__convert_date(
+                            record_date=record[-1],
+                            from_='%Y-%m-%d',
+                            to='%d/%m/%Y'
+                            )
+                        )
+                record[2] = int(record[2]) * rub 
                 self.db.set_item(
                         "sheet",
                         "id, number_of_order, cost, delivery_time",
@@ -70,3 +86,5 @@ class GoogleSheetWorker:
         """
 
         return data[first_index][second_index]
+
+#TODO b. Данные для перевода $ в рубли необходимо получать по курсу ЦБ РФ.
