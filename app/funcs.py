@@ -50,7 +50,9 @@ def send_notification(orders: list) -> None:
     TOKEN = get_config_data("TG_TOKEN")
     CHAT_ID = get_config_data("CHAT_ID")
     message = f"""
-THESE ORDERS: '{orders}' has expired!
+*THESE ORDERS*: 
+{orders} 
+*HAS EXPIRED!*
     """
     URL = f'https://api.telegram.org/bot{TOKEN}/sendMessage?chat_id={CHAT_ID}&text={message}'
     requests.get(

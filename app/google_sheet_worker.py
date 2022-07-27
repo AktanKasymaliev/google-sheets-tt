@@ -40,11 +40,11 @@ class GoogleSheetWorker:
         """
         parsed_order = self.parse_sheet_data()
         expired_orders = []
-        try:
-            for order in parsed_order:
+        for order in parsed_order:
+            try:
                 order[-1] = self.__convert_date(order[-1], '%d.%m.%Y', '%Y-%m-%d')
                 if is_expired_date(self.__make_date_for_comparing(order)):
-                    expired_orders.append(order)
+                    expired_orders.append(int(order[1]))
 
                 rub = self.__convert_from_usd_to_rub(
                     self.__convert_date(
@@ -60,8 +60,8 @@ class GoogleSheetWorker:
                         "id, number_of_order, cost, delivery_time",
                         "{}, '{}', {}, '{}'".format(*order)
                     )
-        except IntegrityError:
-            print("\nSome Google Sheet records are already in database!\nIf the sheet had new orders - they were added to database\n")
+            except IntegrityError:
+                continue
         send_notification(expired_orders)
 
     def get_all_records_from_db(self) -> list:
