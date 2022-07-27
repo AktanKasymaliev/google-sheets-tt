@@ -48,7 +48,6 @@ class GoogleSheetWorker:
             for record in parsed_records:
                 # Formating from your datestamp to database's
                 record[-1] = self.__convert_date(record[-1], '%d.%m.%Y', '%Y-%m-%d')
-
                 rub = self.__convert_from_usd_to_rub(
                     self.__convert_date(
                             record_date=record[-1],
@@ -56,6 +55,7 @@ class GoogleSheetWorker:
                             to='%d/%m/%Y'
                             )
                         )
+                        
                 record[2] = int(record[2]) * rub 
                 self.db.set_item(
                         "sheet",
