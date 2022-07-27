@@ -21,3 +21,4 @@ urllib3==1.26.11
 SQLAlchemy==1.4.39
 psycopg2==2.9.3
 xmltodict==0.13.0
+pyTelegramBotAPI==4.6.1

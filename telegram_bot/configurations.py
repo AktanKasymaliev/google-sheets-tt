@@ -34,15 +34,10 @@ def config() -> None:
     for the database connection
     """
     config_parse = ConfigParser()
-    config_parse.read("settings.ini")
-    SYSTEM = "SYSTEM"
+    config_parse.read("tg_settings.ini")
+    BOT = "BOT"
 
-    os.environ.setdefault("DATABASE_NAME", load_conf(config_parse, SYSTEM, "NAME", "blog"))
-    os.environ.setdefault("DATABASE_USER", load_conf(config_parse, SYSTEM, "USER", "user"))
-    os.environ.setdefault("DATABASE_PASSW", load_conf(config_parse, SYSTEM, "PASSWORD", "root"))
-    os.environ.setdefault("DATABASE_HOST", load_conf(config_parse, SYSTEM, "HOST", "localhost"))
-    os.environ.setdefault("DATABASE_PORT", load_conf(config_parse, SYSTEM, "PORT", "5432"))
-    os.environ.setdefault("TG_TOKEN", load_conf(config_parse, SYSTEM, "TG_TOKEN", "token"))
+    os.environ.setdefault("TG_TOKEN", load_conf(config_parse, BOT, "TG_TOKEN", "token"))
 
 def get_config_data(key: str) -> str:
     """

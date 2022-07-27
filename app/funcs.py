@@ -1,3 +1,4 @@
+import datetime
 import xmltodict
 import requests
 
@@ -32,8 +33,16 @@ def get_dollar_currency(date) -> float:
 def parse_xml_data(response) -> float:
     xml_data = xmltodict.parse(response.content)
 
-    for currency in xml_data['ValCurs']['Valute']:
-        if currency['@ID'] == 'R01235':
-            rub = float(currency['Value'].replace(',', '.'))
+    for order in xml_data['ValCurs']['Valute']:
+        if order['@ID'] == 'R01235':
+            rub = float(order['Value'].replace(',', '.'))
 
     return rub
+
+def is_expired_date(date) -> bool:
+    if datetime.datetime.now().date() > date:
+        return True
+    return False
+
+def send_notification(order: dict) -> None:
+    print("DATE EXPIRED")

@@ -1,14 +1,16 @@
 ; For docker postgresql database
-; [DATABASE]
+; [SYSTEM]
 ; NAME=postgres
 ; PASSWORD=postgres
 ; HOST=db
 ; USER=postgres
+; TG_TOKEN=token
 
 ; Your local database
-[DATABASE]
+[SYSTEM]
 NAME=db
 PASSWORD=db
 HOST=db
 PORT=db
 USER=db
+TG_TOKEN=token

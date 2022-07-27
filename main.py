@@ -21,7 +21,7 @@ def main():
         
         member=sheet_members)
     sheet = init_sheet(credentials, sheet_id, sheet_range)
-
+    
     w = GoogleSheetWorker(sheet_db, sheet)
     w.save_data_to_database()
     pprint(w.get_all_records_from_db())
