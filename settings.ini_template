@@ -5,6 +5,7 @@
 ; HOST=db
 ; USER=postgres
 ; TG_TOKEN=token
+; CHAT_ID=id
 
 ; Your local database
 [SYSTEM]
@@ -14,3 +15,4 @@ HOST=db
 PORT=db
 USER=db
 TG_TOKEN=token
+CHAT_ID=id

@@ -43,6 +43,7 @@ def config() -> None:
     os.environ.setdefault("DATABASE_HOST", load_conf(config_parse, SYSTEM, "HOST", "localhost"))
     os.environ.setdefault("DATABASE_PORT", load_conf(config_parse, SYSTEM, "PORT", "5432"))
     os.environ.setdefault("TG_TOKEN", load_conf(config_parse, SYSTEM, "TG_TOKEN", "token"))
+    os.environ.setdefault("CHAT_ID", load_conf(config_parse, SYSTEM, "CHAT_ID", "token"))
 
 def get_config_data(key: str) -> str:
     """

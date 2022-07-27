@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import date, datetime
 
 from db.db import DB
 from sheet.sheet import Sheet
@@ -34,17 +34,18 @@ class GoogleSheetWorker:
         parsed_data.pop(0)
         return parsed_data
 
-
-
     def save_data_to_database(self):
         """
         It takes the data from the Google Sheet, and saves it to the database
         """
         parsed_order = self.parse_sheet_data()
+        expired_orders = []
         try:
             for order in parsed_order:
                 order[-1] = self.__convert_date(order[-1], '%d.%m.%Y', '%Y-%m-%d')
-                self.__send_expired_order_to_telegram(order)
+                if is_expired_date(self.__make_date_for_comparing(order)):
+                    expired_orders.append(order)
+
                 rub = self.__convert_from_usd_to_rub(
                     self.__convert_date(
                             record_date=order[-1],
@@ -61,6 +62,7 @@ class GoogleSheetWorker:
                     )
         except IntegrityError:
             print("\nSome Google Sheet records are already in database!\nIf the sheet had new orders - they were added to database\n")
+        send_notification(expired_orders)
 
     def get_all_records_from_db(self) -> list:
         return self.db.get_all_item('sheet')
@@ -85,11 +87,9 @@ class GoogleSheetWorker:
         return formated_date.strftime(to)
     
     @staticmethod
-    def __send_expired_order_to_telegram(order: dict) -> None:
+    def __make_date_for_comparing(order: dict) -> date:
         frmt = '%Y-%m-%d'
-        date = datetime.strptime(order[-1], frmt).date()
-        if is_expired_date(date):
-            send_notification(order)
+        return datetime.strptime(order[-1], frmt).date()
 
     @staticmethod
     def __return_divided_data(

@@ -1,8 +1,10 @@
 import datetime
 import xmltodict
+
 import requests
 
 from db.db import DB
+from configurations import get_config_data
 from sheet.sheet import Sheet
 
 def init_db(
@@ -44,5 +46,13 @@ def is_expired_date(date) -> bool:
         return True
     return False
 
-def send_notification(order: dict) -> None:
-    print("DATE EXPIRED")
+def send_notification(orders: list) -> None:
+    TOKEN = get_config_data("TG_TOKEN")
+    CHAT_ID = get_config_data("CHAT_ID")
+    message = f"""
+THESE ORDERS: '{orders}' has expired!
+    """
+    URL = f'https://api.telegram.org/bot{TOKEN}/sendMessage?chat_id={CHAT_ID}&text={message}'
+    requests.get(
+        URL
+    )

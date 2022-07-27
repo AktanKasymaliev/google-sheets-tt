@@ -1,7 +1,5 @@
 from abc import abstractmethod
 
-from .configurations import get_config_data
-
 from sqlalchemy import create_engine
 from sqlalchemy import MetaData
 from sqlalchemy import Table

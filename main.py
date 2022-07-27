@@ -1,7 +1,7 @@
 from pprint import pprint
 
 from db import sheet_members
-from db.configurations import config, get_config_data
+from configurations import config, get_config_data
 from app.google_sheet_worker import GoogleSheetWorker
 from app.funcs import init_db, init_sheet
 
