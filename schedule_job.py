@@ -5,7 +5,7 @@ from datetime import datetime
 import schedule
 
 def write_logs(path: str):
-    with open(path, 'a') as log:    
+    with open(path, 'w') as log:    
         log.write(f'Data updated or saved at: {str(datetime.now())}\n')
 
 def job():
@@ -14,7 +14,7 @@ def job():
 def main():
     print("\n*Schedule started. Every 5 minutes google-sheet reader bot works*")
     job()
-    schedule.every(5).seconds.do(job)
+    schedule.every(5).minutes.do(job)
 
     while True:
         schedule.run_pending()
