@@ -1,5 +1,4 @@
 from datetime import datetime
-import xmltodict
 
 import requests
 
@@ -24,23 +23,6 @@ def init_sheet(credentials: str, sheet_id: str, sheet_range: str) -> Sheet:
         sheet_range
         )
 
-def get_dollar_currency(date) -> float:
-    URL = f"http://www.cbr.ru/scripts/XML_daily.asp?date_req={date}"
-    response = requests.get(URL)
-    rub_to_dollar = parse_xml_data(response)
-
-    return rub_to_dollar
-
-
-def parse_xml_data(response) -> float:
-    xml_data = xmltodict.parse(response.content)
-
-    for order in xml_data['ValCurs']['Valute']:
-        if order['@ID'] == 'R01235':
-            rub = float(order['Value'].replace(',', '.'))
-
-    return rub
-
 def is_expired_date(date) -> bool:
     if datetime.now().date() > date:
         return True
@@ -58,9 +40,6 @@ def send_notification(orders: list) -> None:
     requests.get(
         URL
     )
-
-def convert_from_usd_to_rub(date) -> float:
-    return get_dollar_currency(date)
 
 def make_date_for_comparing(order: dict) -> datetime.date:
     frmt = '%Y-%m-%d'
