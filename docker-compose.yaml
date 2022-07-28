@@ -7,7 +7,7 @@ services:
           - "5432:5432"
     bot:
         build: .
-        command: python main.py
+        command: python schedule_job.py
         volumes: 
             - .:/app/
         depends_on: 
