@@ -24,6 +24,12 @@ class AbstractDB:
         """ Method for setting items from db  """
         pass
 
+    @abstractmethod
+    def delete_all_items(self) -> str:
+        """ Method for setting items from db  """
+        pass
+
+
     def create_table(self, 
             table_name: str, *columns) -> None:
         """

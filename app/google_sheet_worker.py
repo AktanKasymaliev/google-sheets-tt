@@ -36,6 +36,8 @@ class GoogleSheetWorker:
         """
         It takes the data from the Google Sheet, and saves it to the database
         """
+        self.db.delete_all_items('sheet')
+        
         parsed_order = self.parse_sheet_data()
         ready_orders = asyncio.run(init_async_funcs(parsed_order))
         

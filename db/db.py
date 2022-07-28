@@ -17,6 +17,12 @@ class DB(AbstractDB):
                 )
         return self.engine.execute(query).all()
 
+    def delete_all_items(self, table_name) -> str:
+        query = text(
+                f"TRUNCATE TABLE {table_name}"
+                )
+        return self.engine.execute(query)
+
     def set_item(self, table_name: str, columns: str, values: str) -> str:
         query = text(
             f"INSERT INTO {table_name} ({columns}) \
