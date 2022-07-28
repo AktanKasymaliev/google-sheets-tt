@@ -1,10 +1,8 @@
-from datetime import date, datetime
+import asyncio
 
 from db.db import DB
 from sheet.sheet import Sheet
-from .funcs import get_dollar_currency
-from .funcs import is_expired_date
-from .funcs import send_notification
+from .async_funcs import init_async_funcs
 
 from sqlalchemy.exc import IntegrityError
 
@@ -39,22 +37,10 @@ class GoogleSheetWorker:
         It takes the data from the Google Sheet, and saves it to the database
         """
         parsed_order = self.parse_sheet_data()
-        expired_orders = []
-        for order in parsed_order:
+        ready_orders = asyncio.run(init_async_funcs(parsed_order))
+        
+        for order in ready_orders: 
             try:
-                order[-1] = self.__convert_date(order[-1], '%d.%m.%Y', '%Y-%m-%d')
-                if is_expired_date(self.__make_date_for_comparing(order)):
-                    expired_orders.append(int(order[1]))
-
-                rub = self.__convert_from_usd_to_rub(
-                    self.__convert_date(
-                            record_date=order[-1],
-                            from_='%Y-%m-%d',
-                            to='%d/%m/%Y'
-                            )
-                        )
-                        
-                order[2] = int(order[2]) * rub 
                 self.db.set_item(
                         "sheet",
                         "id, number_of_order, cost, delivery_time",
@@ -62,34 +48,9 @@ class GoogleSheetWorker:
                     )
             except IntegrityError:
                 continue
-        send_notification(expired_orders)
 
     def get_all_records_from_db(self) -> list:
         return self.db.get_all_item('sheet')
-
-    def __convert_from_usd_to_rub(self, date) -> float:
-        return get_dollar_currency(date)
-    
-    def __convert_date(self, record_date: str, from_: str, to: str) -> str:
-        """
-        > This function takes a date string, converts it to a datetime object, and then returns a string in
-        the format specified by the user
-        
-        :param record_date: The date to be converted
-        :type record_date: str
-        :param from_: The format of the date in the record
-        :type from_: str
-        :param to: The format you want to convert to
-        :type to: str
-        :return: A list of dictionaries.
-        """
-        formated_date = datetime.strptime(record_date, from_)
-        return formated_date.strftime(to)
-    
-    @staticmethod
-    def __make_date_for_comparing(order: dict) -> date:
-        frmt = '%Y-%m-%d'
-        return datetime.strptime(order[-1], frmt).date()
 
     @staticmethod
     def __return_divided_data(

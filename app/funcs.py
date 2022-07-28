@@ -1,4 +1,4 @@
-import datetime
+from datetime import datetime
 import xmltodict
 
 import requests
@@ -42,7 +42,7 @@ def parse_xml_data(response) -> float:
     return rub
 
 def is_expired_date(date) -> bool:
-    if datetime.datetime.now().date() > date:
+    if datetime.now().date() > date:
         return True
     return False
 
@@ -58,3 +58,10 @@ def send_notification(orders: list) -> None:
     requests.get(
         URL
     )
+
+def convert_from_usd_to_rub(date) -> float:
+    return get_dollar_currency(date)
+
+def make_date_for_comparing(order: dict) -> datetime.date:
+    frmt = '%Y-%m-%d'
+    return datetime.strptime(order[-1], frmt).date()
