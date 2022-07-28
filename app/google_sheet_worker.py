@@ -10,6 +10,7 @@ class GoogleSheetWorker:
     
     def __init__(self, db: DB, sheet: Sheet) -> None:
         self.db = db
+        self.sheet_table = "sheet"
         self.sheet = sheet
         self.data = self.sheet.read_sheet()['values']
 
@@ -36,7 +37,7 @@ class GoogleSheetWorker:
         """
         It takes the data from the Google Sheet, and saves it to the database
         """
-        self.db.delete_all_items(self.db.dbname)
+        self.db.delete_all_items(self.sheet_table)
 
         parsed_order = self.parse_sheet_data()
         ready_orders = asyncio.run(init_async_funcs(parsed_order))
@@ -44,7 +45,7 @@ class GoogleSheetWorker:
         for order in ready_orders: 
             try:
                 self.db.set_item(
-                        self.db.dbname,
+                        self.sheet_table,
                         "id, number_of_order, cost, delivery_time",
                         "{}, '{}', {}, '{}'".format(*order)
                     )
@@ -52,7 +53,7 @@ class GoogleSheetWorker:
                 continue
 
     def get_all_records_from_db(self) -> list:
-        return self.db.get_all_item(self.db.dbname)
+        return self.db.get_all_item(self.sheet_table)
 
     @staticmethod
     def __return_divided_data(
